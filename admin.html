@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>پنل مدیریت</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="hero">
+
+<h1>پنل مدیریت</h1>
+
+<h3 id="welcome"></h3>
+
+<input
+type="text"
+id="search"
+placeholder="جستجوی کاربر..."
+onkeyup="showUsers()">
+
+<div id="users"></div>
+
+<br>
+
+<button class="btn2" onclick="logout()">
+خروج
+</button>
+
+</div>
+
+<script>
+
+let loginUser=JSON.parse(localStorage.getItem("loginUser"));
+
+if(!loginUser){
+location.href="login.html";
+}
+
+document.getElementById("welcome").innerHTML=
+"خوش آمدی "+loginUser.fullName;
+
+function showUsers(){
+
+let list=JSON.parse(localStorage.getItem("users"))||[];
+
+let search=document.getElementById("search").value.toLowerCase();
+
+let html="";
+
+list.forEach((user,index)=>{
+
+if(user.fullName.toLowerCase().includes(search) ||
+user.username.toLowerCase().includes(search)){
+
+html+=`
+<div style="background:#ffffff20;padding:15px;border-radius:10px;margin:10px 0;">
+<b>${user.fullName}</b><br>
+📱 ${user.phone}<br>
+👤 ${user.username}<br><br>
+
+<button onclick="deleteUser(${index})">
+حذف
+</button>
+
+</div>
+`;
+
+}
+
+});
+
+document.getElementById("users").innerHTML=html;
+
+}
+
+function deleteUser(index){
+
+let users=JSON.parse(localStorage.getItem("users"))||[];
+
+users.splice(index,1);
+
+localStorage.setItem("users",JSON.stringify(users));
+
+showUsers();
+
+}
+
+showUsers();
+
+</script>
+
+<script src="app.js"></script>
+
+</body>
+</html>
